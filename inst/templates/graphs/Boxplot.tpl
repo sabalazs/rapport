@@ -1,44 +1,38 @@
 <!--head
 meta:
-  title: Graphing (Boxplot)
-  author: Daniel Nagy
-  description: In this template Rapporter will present you boxplot.
-  email: ~
-  packages:
-  - RColorBrewer
-  example:
-  - rapport('Boxplot.tpl', data=ius2008, var1='age', var2='gender')
-  - rapport('Boxplot.tpl', data=ius2008, var1='age', var2='gender', 
-            plot.title.pos = "nowhere", var1.lab = "Years of age", 
-            var2.lab = "Male or Female?", fontfamily = "symbol", 
-            fontcolor = "purple", fontsize = 13, background = "grey")
+  title: Boxplot
+  description: ''
+  author: Daniel Nagy, Balázs Sághy (@sabalazs)
+  packages: RColorBrewer
 inputs:
-- name: var1
-  label: Used Variable 1
-  description: This is the first variable that you will use here
+- required: yes
   class: numeric
+  name: var1
+  label: Used Variable 1
+  standalone: no
   length:
     min: 1.0
     max: 1.0
-  required: yes
-  standalone: no
-- name: var2
-  label: Used Variable 2
-  description: This is the factor variable that you will use here
+  description: This is the first variable that you will use here
+- required: no
   class: factor
+  name: var2
+  label: Used Variable 2
+  standalone: no
   length:
     min: 1.0
     max: 1.0
-  required: no
-  standalone: no
-- name: plot.title
-  label: Title of the plot
-  description: This is good to set the title of the plot.
+  description: This is the factor variable that you will use here
+- required: no
   class: character
-  value: default
-  matchable: no
-  required: no
+  name: plot.title
+  label: Title of the plot
   standalone: yes
+  value: default
+  length:
+    min: 1.0
+    max: 1.0
+  description: This is good to set the title of the plot.
 - name: plot.title.pos
   label: Position of the title of the plot
   description: Specifying the position of the title of the plot
@@ -52,141 +46,50 @@ inputs:
   allow_multiple: no
   required: no
   standalone: yes
-- name: var1.lab
-  label: var1 label
-  description: This is the name of the var1 label on the plot.
+- required: no
   class: character
-  value: default
-  matchable: no
-  required: no
-  standalone: yes
-- name: var2.lab
-  label: var2 label
-  description: This is the name of the var2 label on the plot.
-  class: character
-  value: default
-  matchable: no
-  required: no
-  standalone: yes
-- name: nomargin
-  label: Graph no margin
-  description: if trying to keep plots' margins at minimal
-  class: logical
-  value: TRUE
-  required: no
-  standalone: yes
-- name: fontfamily
-  label: Family of the font
-  description: Specifying the font family to be used in images
-  class: character
-  options:
-  - serif
-  - sans
-  - mono
-  - symbol
-  value: sans
-  matchable: yes
-  allow_multiple: no
-  required: no
-  standalone: yes
-- name: fontcolor
+  name: fontcolor
   label: Color of the font
-  description: Specifying the default font color
-  class: character
-  value: black
-  matchable: no
-  required: no
   standalone: yes
-- name: fontsize
-  label: Size of the font
-  description: Specifying the base font size in pixels
+  value: black
+  length:
+    min: 1.0
+    max: 1.0
+  description: Specifying the default font color
+- required: no
   class: integer
-  value: 12
+  name: fontsize
+  label: Size of the font
+  standalone: yes
+  value: 12.0
+  length:
+    min: 1.0
+    max: 1.0
+  description: Specifying the base font size in pixels
   limit:
     min: 1.0
     max: 50.0
-  matchable: no
-  required: no
-  standalone: yes
-- name: grid
-  label: Grid
-  description: If a grid should be added to the plot
-  class: logical
-  value: TRUE
-  required: no
-  standalone: yes
-- name: grid.minor
-  label: Grid minor
-  description: If a miner grid should be also rendered
-  class: logical
-  value: TRUE
-  required: no
-  standalone: yes
-- name: grid.color
-  label: Color of the grid
-  description: Specifying the color of the rendered grid
+- required: no
   class: character
-  value: grey
-  matchable: no
-  required: no
-  standalone: yes
-- name: grid.lty
-  label: Line type of the grid
-  description: Specifying the line type of grid
-  class: character
-  options:
-  - blank
-  - solid
-  - dashed
-  - dotted
-  - dotdash
-  - longdash
-  - twodash
-  value: dashed
-  matchable: yes
-  allow_multiple: no
-  required: no
-  standalone: yes
-- name: boxes
-  label: Graph boxes
-  description: If to render a border around of plot (and e.g. around strip)
-  class: logical
-  value: FALSE
-  required: no
-  standalone: yes
-- name: legend.position
-  label: Position of the legend
-  description: Specifying the position of the legend
-  class: character
-  options:
-  - top
-  - right
-  - bottom
-  - left
-  value: right
-  matchable: yes
-  allow_multiple: no
-  required: no
-  standalone: yes
-- name: background
+  name: background
   label: Background's color
-  description: Specifying the plots main background's color
-  class: character
-  value: white
-  matchable: no
-  required: no
   standalone: yes
-- name: colp
-  label: Color palette
-  description: Color paletter from colorbrewer.com
-  required: no
+  value: white
+  length:
+    min: 1.0
+    max: 1.0
+  description: Specifying the plots main background's color
+- required: no
   class: character
+  name: colp
+  label: Color palette
+  standalone: yes
   value: Set1
   length:
     min: 1.0
-    max: 1.0  
+    max: 1.0
+  description: Color paletter from colorbrewer.com
   matchable: yes
-  standalone: yes
   options:
   - BrBG
   - PiYG
@@ -224,64 +127,48 @@ inputs:
   - YlOrBr
   - YlOrRd
   allow_multiple: no
-- name: color.rnd
-  label: Reordered colors
-  description: Specifying if the palette should be reordered randomly before rendering each plot to get colorful images
+- required: no
   class: logical
-  value: FALSE
-  required: no
+  name: color.rnd
+  label: Reordered colors
   standalone: yes
-- name: axis.angle
-  label: Angle of the axes
-  description: Specifying the angle of axes' labels
+  value: no
+  length:
+    min: 1.0
+    max: 1.0
+  description: Specifying if the palette should be reordered randomly before rendering
+    each plot to get colorful images
+- required: no
   class: integer
+  name: axis.angle
+  label: Angle of the axes
+  standalone: yes
+  value: 1.0
+  length:
+    min: 1.0
+    max: 1.0
+  description: Specifying the angle of axes' labels
   limit:
     min: 1.0
     max: 4.0
-  value: 1.0
-  matchable: no
-  required: no
-  standalone: yes
-- name: symbol
-  label: Specifying a symbol
-  description: Specifying a symbol
-  class: integer
-  value: 1
-  matchable: no
-  required: no
-  standalone: yes
 head-->
-
-<%=
-
-if (nomargin != TRUE) panderOptions('graph.nomargin', nomargin)
-if (fontfamily != "sans") panderOptions('graph.fontfamily', fontfamily)
-if (fontcolor != "black") panderOptions('graph.fontcolor', fontcolor)
-if (fontsize != 12) panderOptions('graph.fontsize', fontsize)
-if (grid != TRUE) panderOptions('graph.grid', grid)
-if (grid.minor != TRUE) panderOptions('graph.grid.minor', grid.minor)
-if (grid.color != "grey") panderOptions('graph.grid.color', grid.color)
-if (grid.lty != "dashed") panderOptions('graph.grid.lty', grid.lty)
-if (boxes != FALSE) panderOptions('graph.boxes', boxes)
-if (legend.position != "right") panderOptions('graph.legend.position', legend.position)
-if (background != "white") panderOptions('graph.background', background)
-if (color.rnd != FALSE) panderOptions('graph.color.rnd', color.rnd)
-if (axis.angle != 1) panderOptions('graph.axis.angle', axis.angle)
-if (symbol != 1) panderOptions('graph.symbol', symbol)
-cs <- brewer.pal(brewer.pal.info[which(rownames(brewer.pal.info) == colp),1], colp)
-if (colp != "Set1") panderOptions('graph.colors', cs)
-
 
 if (length(var2) == 0) {
 var1 <- na.omit(var1)
-if (var1.lab == "default")  var1_lab <- sprintf(var1.label)
 } else {
-NAs <- which(is.na(var1) | is.na(var2))
-var1 <- var1[-NAs]
-var2 <- var2[-NAs]
-if (var1.lab == "default")  var1_lab <- sprintf(var1.label)
-if (var2.lab == "default")  var2_lab <- sprintf(var2.label)
+var1 <- na.omit(var1)
+var2 <- na.omit(var2)
 }
+
+<%=
+
+if (fontcolor != "black") panderOptions('graph.fontcolor', fontcolor)
+if (fontsize != 12) panderOptions('graph.fontsize', fontsize)
+if (background != "white") panderOptions('graph.background', background)
+if (color.rnd != FALSE) panderOptions('graph.color.rnd', color.rnd)
+if (axis.angle != 1) panderOptions('graph.axis.angle', axis.angle)
+cs <- brewer.pal(brewer.pal.info[which(rownames(brewer.pal.info) == colp),1], colp)
+if (colp != "Set1") panderOptions('graph.colors', cs)
 
 
 if (length(var2) == 0) {
@@ -299,12 +186,10 @@ main_lab <- plot.title
 
 
 if (length(var2) == 0) {
-set.caption(ifelse(plot.title.pos == "outside the plot", main_lab, ""))
-suppressWarnings(bwplot(var1, main = ifelse(plot.title.pos == "on the plot", main_lab, ""), xlab = ifelse(var2.lab == "default", var1_lab, var1.lab)))
+set.caption(main_lab)
+suppressWarnings(bwplot(var1, main = main_lab, xlab = var1.label))
 } else {
-set.caption(ifelse(plot.title.pos == "outside the plot", main_lab, ""))
-suppressWarnings(bwplot(var1 ~ var2, main = ifelse(plot.title.pos == "on the plot", main_lab, ""), xlab = ifelse(var2.lab == "default", var2_lab, var2.lab), ylab = ifelse(var1.lab == "default", var1_lab, var1.lab)))
+set.caption(main_lab)
+suppressWarnings(bwplot(var1 ~ var2, main = main_lab, xlab = var2.label, ylab = var1.label))
 }
 %>
-
-
