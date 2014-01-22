@@ -38,6 +38,16 @@ inputs:
     min: 1.0
     max: 1.0
   description: This is the second factor variable to group by. (Optional)
+- name: fontsize
+  label: Size of the font
+  description: Specifying the base font size in pixels
+  class: integer
+  limit:
+    min: 1
+    max: 50.0
+  matchable: no
+  required: no
+  standalone: yes
 - name: rotate.labels
   label: Rotate axes' labels
   description: Specifying if the axes' labels should be rotated, to avoid overlapping.
@@ -47,6 +57,23 @@ inputs:
   standalone: yes
 head-->
 <%=
+
+## Adjusting font size, if the user has different default plotsize/fontsize settings
+  
+if (exists('fontsize') && !is.null(fontsize)) {panderOptions('graph.fontsize',fontsize)
+  } else {
+    fsmultip <- 0
+    fsmultip <- (480 - min(evalsOptions('width'), evalsOptions('height')))/480
+    panderOptions('graph.fontsize',panderOptions('graph.fontsize')-fsmultip*panderOptions('graph.fontsize'))
+  }
+
+## Calculating ideal line length for the labels
+
+line_length <- 60
+fgsize_ratio <- panderOptions('graph.fontsize')/min(evalsOptions('width'), evalsOptions('height'))
+if (fgsize_ratio > 12/480) {
+  line_length <- floor (60*((12/480)/fgsize_ratio))
+}  
 
 ## Most of the code was copy-pasted from a related article on cookbook
 
@@ -94,27 +121,25 @@ conf.interval=.95
 
 dfc <- datac
 
-## Error bars represent standard error of the mean
-  
 if (rotate.labels != FALSE){
   panderOptions('graph.axis.angle', 2)
 }
 
-if ((evalsOptions('width')!=480 | evalsOptions('height'))!=480) {
-  x <- (480 - min(evalsOptions('width'), evalsOptions('height')))/480
-  panderOptions('graph.fontsize',panderOptions('graph.fontsize')-x*panderOptions('graph.fontsize'))
-}
+
+
+## Error bars represent standard error of the mean
+
 
  if (!is.null(var3)) { 
-plottolj <- ggplot(dfc, aes(x=var2, y=var1, fill=var3)) + xlab(str_wrap(rp.label(var2), width=60)) + ylab(str_wrap(rp.label(var1), width=60)) + labs(fill=str_wrap(rp.label(var3), width=15)) 
+plottolj <- ggplot(dfc, aes(x=var2, y=var1, fill=var3)) + xlab(str_wrap(rp.label(var2), width=line_length)) + ylab(str_wrap(rp.label(var1), width=line_length))  + labs(fill=str_wrap(rp.label(var3), width=15)) 
 plottolj <- plottolj + geom_bar(position=position_dodge(), stat='identity')
 plottolj <- plottolj + geom_errorbar(aes(ymin=var1-se, ymax=var1+se), width=.2, position=position_dodge(.9))
 } else {
-plottolj <- ggplot(dfc, aes(x=var2, y=var1)) + xlab(str_wrap(rp.label(var2), width=60)) + ylab(str_wrap(rp.label(var1), width=60))
+plottolj <- ggplot(dfc, aes(x=var2, y=var1)) + xlab(str_wrap(rp.label(var2), width=line_length)) + ylab(str_wrap(rp.label(var1), width=line_length))
 plottolj <- plottolj + geom_bar(position=position_dodge(), stat='identity')
 plottolj <- plottolj + geom_errorbar(aes(ymin=var1-se, ymax=var1+se), width=.2, position=position_dodge(.9))
 }
-
 plottolj
+
 
 %>
