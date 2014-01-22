@@ -34,6 +34,14 @@ head-->
 panderOptions('graph.legend.position', 'top')
 %>
 
+## Adjusting font size, if the user has different default plotsize/fontsize settings
+  
+if (exists('fontsize') && !is.null(fontsize)) {panderOptions('graph.fontsize',fontsize)
+  } else {
+    fsmultip <- 0
+    fsmultip <- (480 - min(evalsOptions('width'), evalsOptions('height')))/480
+    panderOptions('graph.fontsize',panderOptions('graph.fontsize')-fsmultip*panderOptions('graph.fontsize'))
+  }
 
 <%=
 table <- table(rp.data[,x.name], rp.data[,y.name], deparse.level = 0, useNA = 'no')

@@ -328,7 +328,22 @@ if (symbol != 1) panderOptions('graph.symbol', symbol)
 cs <- brewer.pal(brewer.pal.info[which(rownames(brewer.pal.info) == colp),1], colp)
 if (colp != "Set1") panderOptions('graph.colors', cs)
 
+## Adjusting font size, if the user has different default plotsize/fontsize settings
+  
+if (exists('fontsize') && !is.null(fontsize)) {panderOptions('graph.fontsize',fontsize)
+  } else {
+    fsmultip <- 0
+    fsmultip <- (480 - min(evalsOptions('width'), evalsOptions('height')))/480
+    panderOptions('graph.fontsize',panderOptions('graph.fontsize')-fsmultip*panderOptions('graph.fontsize'))
+  }
 
+## Calculating ideal line length for the labels
+
+line_length <- 60
+fgsize_ratio <- panderOptions('graph.fontsize')/min(evalsOptions('width'), evalsOptions('height'))
+if (fgsize_ratio > 12/480) {
+  line_length <- floor (60*((12/480)/fgsize_ratio))
+}  
 
 if (horizontal) {
 formula <- as.formula(fml("rownames(table(var))", "table(var)"))
@@ -351,6 +366,8 @@ panel.barchart(...) }
 bar_text <- lattice.getOption("panel.barchart")
 }
 
+xlab <- str_wrap(xlab, width=line_length)
+ylab <- str_wrap(ylab, width=line_length)
 
 set.caption(ifelse(plot.title.pos == "outside the plot", main_lab, ""))
 bc <- barchart(formula, main = ifelse(plot.title.pos == "on the plot", main_lab, ""), xlab = xlab, ylab=ylab, space=bar.space, horiz=horizontal, panel = bar_text)

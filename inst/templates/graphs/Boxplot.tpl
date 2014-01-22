@@ -153,14 +153,14 @@ inputs:
     max: 4.0
 head-->
 
+<%=
+
 if (length(var2) == 0) {
 var1 <- na.omit(var1)
 } else {
 var1 <- na.omit(var1)
 var2 <- na.omit(var2)
 }
-
-<%=
 
 if (fontcolor != "black") panderOptions('graph.fontcolor', fontcolor)
 if (fontsize != 12) panderOptions('graph.fontsize', fontsize)
@@ -170,6 +170,22 @@ if (axis.angle != 1) panderOptions('graph.axis.angle', axis.angle)
 cs <- brewer.pal(brewer.pal.info[which(rownames(brewer.pal.info) == colp),1], colp)
 if (colp != "Set1") panderOptions('graph.colors', cs)
 
+## Adjusting font size, if the user has different default plotsize/fontsize settings
+  
+if (exists('fontsize') && !is.null(fontsize)) {panderOptions('graph.fontsize',fontsize)
+  } else {
+    fsmultip <- 0
+    fsmultip <- (480 - min(evalsOptions('width'), evalsOptions('height')))/480
+    panderOptions('graph.fontsize',panderOptions('graph.fontsize')-fsmultip*panderOptions('graph.fontsize'))
+  }
+
+## Calculating ideal line length for the labels
+
+line_length <- 60
+fgsize_ratio <- panderOptions('graph.fontsize')/min(evalsOptions('width'), evalsOptions('height'))
+if (fgsize_ratio > 12/480) {
+  line_length <- floor (60*((12/480)/fgsize_ratio))
+} 
 
 if (length(var2) == 0) {
 if (plot.title == "default")  {
@@ -184,12 +200,11 @@ main_lab <- sprintf('Boxplot of %s and %s',var1.name, var2.name)
 main_lab <- plot.title
 }}
 
-
 if (length(var2) == 0) {
 set.caption(main_lab)
-suppressWarnings(bwplot(var1, main = main_lab, xlab = var1.label))
+suppressWarnings(bwplot(var1, main = main_lab, xlab = str_wrap(var1.label, width=line_length)))
 } else {
 set.caption(main_lab)
-suppressWarnings(bwplot(var1 ~ var2, main = main_lab, xlab = var2.label, ylab = var1.label))
+suppressWarnings(bwplot(var1 ~ var2, main = main_lab, xlab = str_wrap(var2.label, width=line_length), ylab = str_wrap(var1.label, width=line_length)))
 }
 %>

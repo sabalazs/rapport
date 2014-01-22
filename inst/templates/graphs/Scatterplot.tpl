@@ -300,6 +300,23 @@ if (color.rnd != FALSE) panderOptions('graph.color.rnd', color.rnd)
 if (axis.angle != 1) panderOptions('graph.axis.angle', axis.angle)
 if (symbol != 1) panderOptions('graph.symbol', symbol)
 
+## Adjusting font size, if the user has different default plotsize/fontsize settings
+  
+if (exists('fontsize') && !is.null(fontsize)) {panderOptions('graph.fontsize',fontsize)
+  } else {
+    fsmultip <- 0
+    fsmultip <- (480 - min(evalsOptions('width'), evalsOptions('height')))/480
+    panderOptions('graph.fontsize',panderOptions('graph.fontsize')-fsmultip*panderOptions('graph.fontsize'))
+  }
+
+## Calculating ideal line length for the labels
+
+line_length <- 60
+fgsize_ratio <- panderOptions('graph.fontsize')/min(evalsOptions('width'), evalsOptions('height'))
+if (fgsize_ratio > 12/480) {
+  line_length <- floor (60*((12/480)/fgsize_ratio))
+}  
+
 if (plot.title == "default") {
 main_lab <- sprintf('Scatterplot of %s and %s',x.name, y.name)
 } else {
@@ -344,6 +361,6 @@ x <- x[-NAs]
 y <- y[-NAs]
 
 set.caption(ifelse(plot.title.pos == "outside the plot", main_lab, ""))
-xyplot(x ~ y, main = ifelse(plot.title.pos == "on the plot", main_lab, ""), ylab = ifelse(x.lab == "default", x_lab, x.lab), xlab = ifelse(y.lab == "default", y_lab, y.lab), scales=log_axis, panel = lm_line)
+xyplot(x ~ y, main = ifelse(plot.title.pos == "on the plot", main_lab, ""), ylab = ifelse(x.lab == "default", str_wrap(x_lab, width=line_length), str_wrap(x.lab, width=line_length)), xlab = ifelse(y.lab == "default", str_wrap(y_lab, width=line_length), str_wrap(y.lab, width=line_length)), scales=log_axis, panel = lm_line)
 
 %>
